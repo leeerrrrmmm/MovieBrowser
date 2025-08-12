@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_browser/data/model/movie_model.dart';
@@ -29,7 +30,7 @@ class FetchMovieDataSource {
     if (response.statusCode == successKey) {
       final decoded = json.decode(response.body) as Map<String, dynamic>;
       final results = decoded['results'] as List;
-      log('Response: ${response.body}');
+      // log('Response: ${response.body}');
       log('Statuc code: ${response.statusCode}');
 
       return results
