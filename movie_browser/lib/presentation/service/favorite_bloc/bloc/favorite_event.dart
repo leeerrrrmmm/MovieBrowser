@@ -3,6 +3,12 @@ part of 'favorite_bloc.dart';
 /// [FavoriteEvent]
 class FavoriteEvent {}
 
+/// [LoadFavoriteMoviesEvent]
+class LoadFavoriteMoviesEvent extends FavoriteEvent {
+  /// Constructor for [LoadFavoriteMoviesEvent]
+  LoadFavoriteMoviesEvent();
+}
+
 /// [AddFavoriteEvent]
 class AddFavoriteEvent extends FavoriteEvent {
   /// properties of [AddFavoriteEvent]
