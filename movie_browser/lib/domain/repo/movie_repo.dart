@@ -1,0 +1,2 @@
+/// [MovieRepo]
+abstract class MovieRepo {}
