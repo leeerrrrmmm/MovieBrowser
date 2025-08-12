@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_browser/presentation/detail/detail_screen.dart';
 import 'package:movie_browser/presentation/service/bloc/popular_movie_bloc.dart';
 
 /// [MainScreen]
@@ -47,74 +48,84 @@ class _MainScreenState extends State<MainScreen> {
 
             return ListView.builder(
               itemCount: movies.length,
-              itemBuilder: (_, index) {
+              itemBuilder: (context, index) {
                 final movie = movies[index];
 
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Картинка фильма
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: movie.posterPath.isNotEmpty
-                              ? Image.network(
-                                  imageBaseUrl + movie.posterPath,
-                                  width: 100,
-                                  height: 150,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => const Icon(
-                                    Icons.broken_image,
-                                    size: 100,
-                                    color: Colors.grey,
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => DetailScreen(movie: movie),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Картинка фильма
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: movie.posterPath.isNotEmpty
+                                ? Image.network(
+                                    imageBaseUrl + movie.posterPath,
+                                    width: 100,
+                                    height: 150,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (_, __, ___) => const Icon(
+                                      Icons.broken_image,
+                                      size: 100,
+                                      color: Colors.grey,
+                                    ),
+                                  )
+                                : const SizedBox(
+                                    width: 100,
+                                    height: 150,
+                                    child: Icon(
+                                      Icons.movie,
+                                      size: 60,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                )
-                              : const SizedBox(
-                                  width: 100,
-                                  height: 150,
-                                  child: Icon(
-                                    Icons.movie,
-                                    size: 60,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                movie.originalTitle,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                movie.overview,
-                                maxLines: 5,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ],
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  movie.originalTitle,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  movie.overview,
+                                  maxLines: 5,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 );
