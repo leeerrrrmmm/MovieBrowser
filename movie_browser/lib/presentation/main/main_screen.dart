@@ -28,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
       body: BlocBuilder<PopularMovieBloc, PopularMovieState>(
         builder: (_, state) {
           if (state is PopularMovieInitial) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator.adaptive());
           }
           if (state is PopularMovieError) {
             return Center(
@@ -133,7 +133,7 @@ class _MainScreenState extends State<MainScreen> {
             );
           }
 
-          return const Center(child: Text("No movies available"));
+          return const Center(child: CircularProgressIndicator.adaptive());
         },
       ),
     );
