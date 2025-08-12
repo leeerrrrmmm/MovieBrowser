@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_browser/presentation/detail/detail_screen.dart';
-import 'package:movie_browser/presentation/service/bloc/popular_movie_bloc.dart';
+import 'package:movie_browser/presentation/service/popular_bloc/popular_movie_bloc.dart';
 
 /// [MainScreen]
 class MainScreen extends StatefulWidget {
