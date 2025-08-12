@@ -13,11 +13,11 @@ class PopularMovieBloc extends Bloc<PopularMovieEvent, PopularMovieState> {
   /// Constructor for [PopularMovieBloc]
   PopularMovieBloc({required this.fetchMovieUseCase})
     : super(PopularMovieInitial()) {
-    on<LoadPopularMovies>((event, emit) async {
+    on<LoadPopularMovies>((_, emit) async {
       emit(PopularMovieLoading());
       try {
-        final movies = await fetchMovieUseCase.call();
-        emit(PopularMovieLoading(movies: movies));
+        final movies = await fetchMovieUseCase();
+        emit(PopularMovieLoaded(movies: movies));
       } catch (e) {
         emit(PopularMovieError(message: e.toString()));
       }

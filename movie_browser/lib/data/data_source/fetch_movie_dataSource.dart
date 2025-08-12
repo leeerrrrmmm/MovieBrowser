@@ -8,7 +8,7 @@ import 'package:movie_browser/data/model/movie_model.dart';
 /// [FetchMovieDataSource]
 class FetchMovieDataSource {
   /// TMDB api key
-  final String apiKey = dotenv.env['API_KEY']!;
+  final String apiKey = dotenv.env['TMDB_KEY'] ?? '';
 
   /// TMDB base Url
   final String url = 'https://api.themoviedb.org/3/movie/popular';
@@ -33,7 +33,7 @@ class FetchMovieDataSource {
       log('Statuc code: ${response.statusCode}');
 
       return results
-          .map((el) => MovieModel.fromJson(el as Map<String, dynamic>))
+          .map((el) => MovieModel.fromJsom(el as Map<String, dynamic>))
           .toList();
     } else {
       log('Error: ${response.statusCode}');

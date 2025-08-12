@@ -1,18 +1,22 @@
 part of 'popular_movie_bloc.dart';
 
-///
+/// [PopularMovieState]
+
 class PopularMovieState {}
 
 ///
 class PopularMovieInitial extends PopularMovieState {}
 
 ///
-class PopularMovieLoading extends PopularMovieState {
+class PopularMovieLoading extends PopularMovieState {}
+
+///
+class PopularMovieLoaded extends PopularMovieState {
   ///
-  final List<MovieEntity>? movies;
+  final List<MovieEntity> movies;
 
   ///
-  PopularMovieLoading({this.movies = const []});
+  PopularMovieLoaded({required this.movies});
 }
 
 ///
