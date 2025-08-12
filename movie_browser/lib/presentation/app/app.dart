@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movie_browser/data/data_source/fetch_movie_dataSource.dart';
+import 'package:movie_browser/data/repo_impl/movie_repo_impl.dart';
+import 'package:movie_browser/domain/use_case/fetch_movie_use_case.dart';
 import 'package:movie_browser/presentation/main/main_screen.dart';
+import 'package:movie_browser/presentation/service/bloc/popular_movie_bloc.dart';
 
 /// [App]
 class App extends StatelessWidget {
@@ -8,9 +13,15 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+    final movieRepo = MovieRepoImpl(FetchMovieDataSource());
+    final fetchMovieUseCase = FetchMovieUseCase(movieRepo);
+
+    return BlocProvider(
+      create: (_) => PopularMovieBloc(fetchMovieUseCase: fetchMovieUseCase),
+      child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: MainScreen(),
+      ),
     );
   }
 }

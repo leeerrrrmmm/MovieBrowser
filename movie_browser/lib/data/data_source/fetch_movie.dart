@@ -1,2 +1,0 @@
-/// [FetchMovie]
-class FetchMovie {}

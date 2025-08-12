@@ -1,5 +1,5 @@
 /// [MovieEntity]
-class MovieEntity {
+abstract class MovieEntity {
   /// [originalTitle] property
   final String originalTitle;
 
