@@ -1,4 +1,4 @@
-import 'package:movie_browser/data/data_source/fetch_movie_dataSource.dart';
+import 'package:movie_browser/data/data_source/fetch_movie_data_source.dart';
 import 'package:movie_browser/domain/entity/movie_entity.dart';
 import 'package:movie_browser/domain/repo/movie_repo.dart';
 

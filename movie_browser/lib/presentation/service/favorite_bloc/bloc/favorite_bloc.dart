@@ -8,10 +8,9 @@ part 'favorite_state.dart';
 
 /// [FavoriteBloc]
 class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
-  /// properties of [FavoriteBloc]
   final List<MovieEntity> _favoriteMovies = [];
 
-  /// Constructor of [FavoriteBloc]
+  /// Contructor of [FavoriteBloc]
   FavoriteBloc() : super(FavoriteInitial()) {
     on<FavoriteEvent>((_, emit) {
       emit(FavoriteLoading(List.from(_favoriteMovies)));
@@ -19,14 +18,27 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
     on<AddFavoriteEvent>((event, emit) {
       log('Додаємо фільм до обраного: ${event.movie.originalTitle}');
-      _favoriteMovies.add(event.movie);
-      log('Діюча кіл-сть фільмів в state: ${_favoriteMovies.length}');
+      // Перевіряємо, чи фільм вже є в обраному
+      final isAlreadyAdded = _favoriteMovies.any(
+        (movie) => movie.originalTitle == event.movie.originalTitle,
+      );
+
+      if (!isAlreadyAdded) {
+        _favoriteMovies.add(event.movie);
+        log('Кількість фільмів після додавання: ${_favoriteMovies.length}');
+      } else {
+        log('Фільм вже в обраному, пропускаємо додавання');
+      }
       emit(FavoriteLoading(List.from(_favoriteMovies)));
     });
+
     on<RemoveFavoriteEvent>((event, emit) {
-      log('Видаляємо фільм до обраного: ${event.movie.originalTitle}');
-      _favoriteMovies.remove(event.movie);
-      log('Діюча кіл-сть фільмів в state: ${_favoriteMovies.length}');
+      log('Видаляємо фільм з обраного: ${event.movie.originalTitle}');
+      // Відиляємо фільм з обраного
+      _favoriteMovies.removeWhere(
+        (movie) => movie.originalTitle == event.movie.originalTitle,
+      );
+      log('Кількість фільмів після видалення: ${_favoriteMovies.length}');
       emit(FavoriteLoading(List.from(_favoriteMovies)));
     });
   }
