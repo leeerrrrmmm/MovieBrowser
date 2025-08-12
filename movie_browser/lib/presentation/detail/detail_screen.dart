@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movie_browser/domain/entity/movie_entity.dart';
+import 'package:movie_browser/presentation/service/favorite_bloc/bloc/favorite_bloc.dart';
 
 /// [DetailScreen]
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   /// property for movie detail
   final MovieEntity movie;
 
@@ -13,22 +15,61 @@ class DetailScreen extends StatelessWidget {
   static const String imageBaseUrl = 'https://image.tmdb.org/t/p/w500';
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  bool isAdded = false;
+
+  @override
   Widget build(BuildContext context) {
-    final posterUrl = movie.posterPath.isNotEmpty
-        ? imageBaseUrl + movie.posterPath
+    final posterUrl = widget.movie.posterPath.isNotEmpty
+        ? DetailScreen.imageBaseUrl + widget.movie.posterPath
         : null;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Movie Details'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.favorite_border),
-            tooltip: 'Add to Favorites',
-            onPressed: () {
-              // TODO: добавить логику добавления в понравившиеся
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Добавлено в понравившиеся')),
+          BlocBuilder<FavoriteBloc, FavoriteState>(
+            builder: (context, state) {
+              // Отримуэмо список улюблених фільмів
+              final favoriteMovies = <MovieEntity>[];
+
+              // Якщо стан є FavoriteLoading, додаємо фільми до списку
+              if (state is FavoriteLoading) {
+                favoriteMovies.addAll(state.movies ?? []);
+              }
+
+              // Перевіряємо, чи фільм уже додано до улюблених
+              final isAdded = favoriteMovies.any(
+                (movie) => movie.originalTitle == widget.movie.originalTitle,
+              );
+
+              return IconButton(
+                icon: isAdded
+                    ? const Icon(Icons.favorite)
+                    : const Icon(Icons.favorite_border),
+                tooltip: isAdded
+                    ? 'Видалити з сподобавшихся'
+                    : 'Додати до сподобавшихся',
+                onPressed: () {
+                  if (isAdded) {
+                    context.read<FavoriteBloc>().add(
+                      RemoveFavoriteEvent(widget.movie),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Видалено з сподобавшихся')),
+                    );
+                  } else {
+                    context.read<FavoriteBloc>().add(
+                      AddFavoriteEvent(widget.movie),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Додано до сподобавшихся')),
+                    );
+                  }
+                },
               );
             },
           ),
@@ -57,12 +98,12 @@ class DetailScreen extends StatelessWidget {
               ),
             const SizedBox(height: 20),
             Text(
-              movie.originalTitle,
+              widget.movie.originalTitle,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Text(
-              'Release date: ${movie.releaseDate}',
+              'Release date: ${widget.movie.releaseDate}',
               style: const TextStyle(
                 fontSize: 16,
                 fontStyle: FontStyle.italic,
@@ -70,7 +111,7 @@ class DetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Text(movie.overview, style: const TextStyle(fontSize: 16)),
+            Text(widget.movie.overview, style: const TextStyle(fontSize: 16)),
           ],
         ),
       ),
